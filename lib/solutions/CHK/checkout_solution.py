@@ -27,8 +27,38 @@ FREE_OFFERS = {
     "E": (2, "B", 1),
     "F": (2, "F", 1),
 }
+
+
 def process_price_table():
-    path = 
+    PRICE_TABLE = {}
+    OFFERS = {}
+    FREE_OFFERS = {}
+    path = pathlib.Path(__file__).parent.joinpath("price_table.txt")
+    with open(path, "r") as csvfile:
+        reader = csv.reader(csvfile, delimiter="|")
+        rows = list(reader)
+    for row in rows:
+        sku = row[0].strip()
+        price = int(row[1].strip())
+        sku_offers = row[2].strip()
+        PRICE_TABLE[sku] = price
+        if "for" in sku_offers:
+            OFFERS[sku] = process_offers(sku_offers)
+    return PRICE_TABLE, OFFERS, FREE_OFFERS
+
+
+def get_offer_count(offer: str, sku: str):
+    return int(offer[: offer.index(sku)])
+
+
+def process_offers(offers: str, sku: str):
+    offers_dict = {}
+    for offer in offers.split(","):
+        count = get_offer_count(offer)
+        price = int(offer.split("for")[1].strip())
+        offers_dict[count] = price
+    return offers_dict
+
 
 def checkout(skus):
     price = 0
@@ -56,4 +86,5 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
 
