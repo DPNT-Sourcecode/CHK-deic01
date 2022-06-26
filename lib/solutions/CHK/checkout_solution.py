@@ -44,6 +44,8 @@ def process_price_table():
         PRICE_TABLE[sku] = price
         if "for" in sku_offers:
             OFFERS[sku] = process_offers(sku_offers, sku)
+        if "get" in sku_offers:
+            FREE_OFFERS[sku] = process_free_offer(sku_offers, sku)
     return PRICE_TABLE, OFFERS, FREE_OFFERS
 
 
@@ -58,6 +60,12 @@ def process_offers(offers: str, sku: str):
         price = int(offer.split("for")[1].strip())
         offers_dict[count] = price
     return offers_dict
+
+
+def process_free_offer(offer: str, sku: str):
+    count = get_offer_count(offer, sku)
+    offer_sku = offer.split("one")[1].strip()[0]
+    return (count, offer_sku, 1)
 
 
 def checkout(skus):
@@ -86,6 +94,3 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
-
-
-
