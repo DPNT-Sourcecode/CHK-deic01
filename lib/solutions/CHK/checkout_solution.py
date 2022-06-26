@@ -32,7 +32,11 @@ def checkout(skus):
     for sku in FREE_OFFERS:
         while count[sku] >= FREE_OFFERS[sku][0]:
             price += PRICE_TABLE[sku] * FREE_OFFERS[sku][0]
-            if FREE_OFFERS[sku][2] <= count[FREE_OFFERS[sku][1]]:
+            if sku == FREE_OFFERS[sku][1]:
+                min_count = FREE_OFFERS[sku][0] + FREE_OFFERS[sku][2]
+            else:
+                min_count = FREE_OFFERS[sku][2]
+            if min_count <= count[FREE_OFFERS[sku][1]]:
                 count[FREE_OFFERS[sku][1]] -= FREE_OFFERS[sku][2]
             count[sku] -= FREE_OFFERS[sku][0]
     for sku in count:
@@ -48,6 +52,7 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
 
 
 
