@@ -21,7 +21,7 @@ def checkout(skus):
     count = Counter(skus)
     for sku in count:
         if sku in OFFERS:
-            while count[sku] > OFFERS[sku][0]:
+            while count[sku] >= OFFERS[sku][0]:
                 price += OFFERS[sku][1]
                 count[sku] -= OFFERS[sku][0]
         try:
@@ -29,3 +29,4 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
