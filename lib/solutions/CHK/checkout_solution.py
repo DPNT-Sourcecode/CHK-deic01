@@ -8,6 +8,7 @@ import re
 
 
 def process_price_table():
+    """Process a csv formatted price table and return a tuple containing prices and offer dictionaries"""
     PRICE_TABLE = {}
     OFFERS = {}
     FREE_OFFERS = {}
@@ -38,10 +39,12 @@ def process_price_table():
 
 
 def get_offer_count(offer: str, sku: str):
+    """Get count of an sku required to satisfy an offer"""
     return int(offer[: offer.index(sku)])
 
 
 def process_offers(offers: str, sku: str):
+    """Process a set of comma separated price offers of the form '3A for 130'"""
     offers_dict = {}
     for offer in offers.split(","):
         count = get_offer_count(offer, sku)
@@ -51,6 +54,7 @@ def process_offers(offers: str, sku: str):
 
 
 def process_free_offer(offer: str, sku: str):
+    """Process an offer of the form '3N get one M free'"""
     count = get_offer_count(offer, sku)
     offer_sku = offer.split("one")[1].strip()[0]
     return (count, offer_sku, 1)
@@ -108,5 +112,6 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
 
 
