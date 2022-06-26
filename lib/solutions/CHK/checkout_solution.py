@@ -9,6 +9,7 @@ PRICE_TABLE = {
     "C": 20,
     "D": 15,
     "E": 40,
+    "F": 10,
 }
 
 OFFERS = {
@@ -21,6 +22,7 @@ OFFERS = {
 
 FREE_OFFERS = {
     "E": (2, "B", 1),
+    "F": (2, "F", 1),
 }
 
 
@@ -30,11 +32,9 @@ def checkout(skus):
     for sku in FREE_OFFERS:
         while count[sku] >= FREE_OFFERS[sku][0]:
             price += PRICE_TABLE[sku] * FREE_OFFERS[sku][0]
-            print(FREE_OFFERS[sku][2], count[FREE_OFFERS[sku][1]])
             if FREE_OFFERS[sku][2] <= count[FREE_OFFERS[sku][1]]:
                 count[FREE_OFFERS[sku][1]] -= FREE_OFFERS[sku][2]
             count[sku] -= FREE_OFFERS[sku][0]
-    print(count)
     for sku in count:
         if sku in OFFERS:
             while count[sku] >= min(OFFERS[sku].keys()):
@@ -48,5 +48,6 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
 
 
