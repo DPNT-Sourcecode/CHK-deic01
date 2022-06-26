@@ -30,6 +30,7 @@ def process_price_table():
             OFFERS[sku] = process_offers(sku_offers, sku)
         elif "get" in sku_offers:
             FREE_OFFERS[sku] = process_free_offer(sku_offers, sku)
+    # Process all found group offers. Ensure the group is in price descending order for optimal price
     for group_offer in group_offers_list:
         group_list = re.search(r"\((.*)\)", group_offer).group(1).split(",")
         group_list.sort(reverse=True, key=lambda x: PRICE_TABLE[x])
@@ -61,12 +62,14 @@ def process_free_offer(offer: str, sku: str):
 
 
 def process_group_offer(offer: str):
+    """Process a group offer of the form 'buy any 3 of (S,T,X,Y,Z) for 45'"""
     price = int(re.search(r"for (\d+)", offer).group(1))
     count = int(re.search(r"buy any (\d+)", offer).group(1))
     return (count, price)
 
 
 def get_group_count(group, counter):
+    """Get the total count of skus in a group from a counter object"""
     count = 0
     for sku in group:
         count += counter[sku]
@@ -74,6 +77,7 @@ def get_group_count(group, counter):
 
 
 def checkout(skus):
+    """Calculate to total price of a basket"""
     PRICE_TABLE, OFFERS, FREE_OFFERS, GROUP_OFFERS = process_price_table()
     price = 0
     count = Counter(skus)
@@ -112,6 +116,7 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
 
 
 
