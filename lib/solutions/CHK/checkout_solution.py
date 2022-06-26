@@ -56,6 +56,13 @@ def process_group_offer(offer: str):
     return (count, price)
 
 
+def get_group_count(group, counter):
+    count = 0
+    for sku in group:
+        count += counter[sku]
+    return count
+
+
 def checkout(skus):
     PRICE_TABLE, OFFERS, FREE_OFFERS, GROUP_OFFERS = process_price_table()
     price = 0
@@ -83,7 +90,3 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
-
-
-
-

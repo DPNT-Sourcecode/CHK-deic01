@@ -12,4 +12,3 @@ class TestCheckout:
         assert checkout_solution.checkout("FF") == 20
         assert checkout_solution.checkout("VV") == 90
         assert checkout_solution.checkout("UUUU") == 120
-
