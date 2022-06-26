@@ -12,6 +12,7 @@ def process_price_table():
     OFFERS = {}
     FREE_OFFERS = {}
     GROUP_OFFERS = {}
+    group_offers_list = []
     path = pathlib.Path(__file__).parent.joinpath("price_table.csv")
     with open(path, "r") as csvfile:
         reader = csv.reader(csvfile, delimiter="|")
@@ -22,12 +23,17 @@ def process_price_table():
         sku_offers = row[2].strip()
         PRICE_TABLE[sku] = price
         if "any" in sku_offers:
-            group = tuple(re.search(r"\((.*)\)", sku_offers).group(1).split(","))
-            GROUP_OFFERS[group] = process_group_offer(sku_offers)
+            if sku_offers not in group_offers_list:
+                group_offers_list.append(sku_offers)
         elif "for" in sku_offers:
             OFFERS[sku] = process_offers(sku_offers, sku)
         elif "get" in sku_offers:
             FREE_OFFERS[sku] = process_free_offer(sku_offers, sku)
+    for group_offer in group_offers_list:
+        group_list = re.search(r"\((.*)\)", group_offer).group(1).split(",")
+        group_list.sort(reverse=True, key=lambda x: PRICE_TABLE[x])
+        group = tuple(group_list)
+        GROUP_OFFERS[group] = process_group_offer(sku_offers)
     return PRICE_TABLE, OFFERS, FREE_OFFERS, GROUP_OFFERS
 
 
@@ -67,6 +73,16 @@ def checkout(skus):
     PRICE_TABLE, OFFERS, FREE_OFFERS, GROUP_OFFERS = process_price_table()
     price = 0
     count = Counter(skus)
+    for group in GROUP_OFFERS:
+        min_count = GROUP_OFFERS[group][0]
+        price = GROUP_OFFERS[group][1]
+        while get_group_count(group, count) >= min_count:
+            removed = 0
+            for sku in group:
+                if removed == min_count:
+                    break
+                if count[sku] >= 1:
+                    count[sku]
     for sku in FREE_OFFERS:
         while count[sku] >= FREE_OFFERS[sku][0]:
             price += PRICE_TABLE[sku] * FREE_OFFERS[sku][0]
@@ -90,3 +106,4 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
