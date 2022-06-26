@@ -12,8 +12,13 @@ PRICE_TABLE = {
 }
 
 OFFERS = {
-    "A": (3, 130),
-    "B": (2, 45),
+    "A": {
+        3: 130,
+        5: 200,
+    },
+    "B": {
+        2: 45
+    }
 }
 
 FREE_OFFERS = {
@@ -35,6 +40,3 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
-
-
-
