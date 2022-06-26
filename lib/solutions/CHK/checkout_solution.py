@@ -6,29 +6,6 @@ import csv
 import pathlib
 
 
-PRICE_TABLE = {
-    "A": 50,
-    "B": 30,
-    "C": 20,
-    "D": 15,
-    "E": 40,
-    "F": 10,
-}
-
-OFFERS = {
-    "A": {
-        3: 130,
-        5: 200,
-    },
-    "B": {2: 45},
-}
-
-FREE_OFFERS = {
-    "E": (2, "B", 1),
-    "F": (2, "F", 1),
-}
-
-
 def process_price_table():
     PRICE_TABLE = {}
     OFFERS = {}
@@ -69,6 +46,7 @@ def process_free_offer(offer: str, sku: str):
 
 
 def checkout(skus):
+    PRICE_TABLE, OFFERS, FREE_OFFERS = process_price_table()
     price = 0
     count = Counter(skus)
     for sku in FREE_OFFERS:
@@ -94,3 +72,4 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
