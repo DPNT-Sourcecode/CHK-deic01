@@ -17,5 +17,15 @@ OFFERS = {
 
 
 def checkout(skus):
-    raise NotImplementedError()
-
+    price = 0
+    count = Counter(skus)
+    for sku in count:
+        if sku in OFFERS:
+            while count[sku] > OFFERS[sku][0]:
+                price += OFFERS[sku][1]
+                count[sku] -= OFFERS[sku][0]
+        try:
+            price += PRICE_TABLE[sku] * count[sku]
+        except KeyError:
+            return -1
+    return price
