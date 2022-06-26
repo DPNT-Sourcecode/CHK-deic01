@@ -22,8 +22,8 @@ def process_price_table():
         sku_offers = row[2].strip()
         PRICE_TABLE[sku] = price
         if "any" in sku_offers:
-            group = tuple(re.search(r"\((.*)\)", s).group(1).split(","))
-            GROUP_OFFERS[]
+            group = tuple(re.search(r"\((.*)\)", sku_offers).group(1).split(","))
+            GROUP_OFFERS[group] = process_group_offer(sku_offers)
         elif "for" in sku_offers:
             OFFERS[sku] = process_offers(sku_offers, sku)
         elif "get" in sku_offers:
@@ -48,6 +48,10 @@ def process_free_offer(offer: str, sku: str):
     count = get_offer_count(offer, sku)
     offer_sku = offer.split("one")[1].strip()[0]
     return (count, offer_sku, 1)
+
+
+def process_group_offer(offer: str):
+    pass
 
 
 def checkout(skus):
@@ -77,5 +81,6 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
 
 
