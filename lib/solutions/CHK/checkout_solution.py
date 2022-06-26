@@ -2,6 +2,9 @@
 # skus = unicode string
 
 from collections import Counter
+import csv
+import pathlib
+
 
 PRICE_TABLE = {
     "A": 50,
@@ -24,7 +27,8 @@ FREE_OFFERS = {
     "E": (2, "B", 1),
     "F": (2, "F", 1),
 }
-
+def process_price_table():
+    path = 
 
 def checkout(skus):
     price = 0
@@ -52,3 +56,4 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
