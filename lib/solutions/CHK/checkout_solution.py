@@ -75,14 +75,16 @@ def checkout(skus):
     count = Counter(skus)
     for group in GROUP_OFFERS:
         min_count = GROUP_OFFERS[group][0]
-        price = GROUP_OFFERS[group][1]
+        group_price = GROUP_OFFERS[group][1]
         while get_group_count(group, count) >= min_count:
             removed = 0
             for sku in group:
                 if removed == min_count:
                     break
-                if count[sku] >= 1:
-                    count[sku]
+                while removed < min_count and count[sku] > 0:
+                    removed += 1
+                    count[sku] -= 1
+            price += group_price
     for sku in FREE_OFFERS:
         while count[sku] >= FREE_OFFERS[sku][0]:
             price += PRICE_TABLE[sku] * FREE_OFFERS[sku][0]
@@ -106,4 +108,5 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
 
