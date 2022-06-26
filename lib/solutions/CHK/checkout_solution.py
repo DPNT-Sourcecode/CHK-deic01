@@ -28,7 +28,7 @@ def process_price_table():
             OFFERS[sku] = process_offers(sku_offers, sku)
         elif "get" in sku_offers:
             FREE_OFFERS[sku] = process_free_offer(sku_offers, sku)
-    return PRICE_TABLE, OFFERS, FREE_OFFERS
+    return PRICE_TABLE, OFFERS, FREE_OFFERS, GROUP_OFFERS
 
 
 def get_offer_count(offer: str, sku: str):
@@ -51,11 +51,13 @@ def process_free_offer(offer: str, sku: str):
 
 
 def process_group_offer(offer: str):
-    pass
+    price = int(re.search(r"for (\d+)", offer).group(1))
+    count = int(re.search(r"buy any (\d+)", offer).group(1))
+    return (count, price)
 
 
 def checkout(skus):
-    PRICE_TABLE, OFFERS, FREE_OFFERS = process_price_table()
+    PRICE_TABLE, OFFERS, FREE_OFFERS, GROUP_OFFERS = process_price_table()
     price = 0
     count = Counter(skus)
     for sku in FREE_OFFERS:
@@ -81,6 +83,7 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
 
 
 
