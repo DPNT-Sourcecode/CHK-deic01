@@ -4,12 +4,14 @@
 from collections import Counter
 import csv
 import pathlib
+import re
 
 
 def process_price_table():
     PRICE_TABLE = {}
     OFFERS = {}
     FREE_OFFERS = {}
+    GROUP_OFFERS = {}
     path = pathlib.Path(__file__).parent.joinpath("price_table.csv")
     with open(path, "r") as csvfile:
         reader = csv.reader(csvfile, delimiter="|")
@@ -19,9 +21,12 @@ def process_price_table():
         price = int(row[1].strip())
         sku_offers = row[2].strip()
         PRICE_TABLE[sku] = price
-        if "for" in sku_offers:
+        if "any" in sku_offers:
+            group = tuple(re.search(r"\((.*)\)", s).group(1).split(","))
+            GROUP_OFFERS[]
+        elif "for" in sku_offers:
             OFFERS[sku] = process_offers(sku_offers, sku)
-        if "get" in sku_offers:
+        elif "get" in sku_offers:
             FREE_OFFERS[sku] = process_free_offer(sku_offers, sku)
     return PRICE_TABLE, OFFERS, FREE_OFFERS
 
@@ -72,4 +77,5 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
 
