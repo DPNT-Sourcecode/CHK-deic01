@@ -5,3 +5,5 @@ class TestCheckout:
     def test_checkout(self):
         assert checkout_solution.checkout("ABCDABCD") == 215
         assert checkout_solution.checkout("AAAAAAAAAEEBBB") == 505
+        assert checkout_solution.checkout("EE") == 50
+
