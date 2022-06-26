@@ -52,7 +52,3 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
-
-
-
-
