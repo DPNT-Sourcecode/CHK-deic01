@@ -15,10 +15,15 @@ OFFERS = {
     "B": (2, 45),
 }
 
+FREE_OFFERS = {
+    "E": (2, "B"),
+}
+
 
 def checkout(skus):
     price = 0
     count = Counter(skus)
+
     for sku in count:
         if sku in OFFERS:
             while count[sku] >= OFFERS[sku][0]:
@@ -29,4 +34,5 @@ def checkout(skus):
         except KeyError:
             return -1
     return price
+
 
